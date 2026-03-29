@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creator Earnings Calculator — Know Your Worth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --accent: #00FF94;
+    --accent-dim: rgba(0,255,148,0.15);
+    --accent-glow: rgba(0,255,148,0.4);
+    --violet: #8B5CF6;
+    --violet-dim: rgba(139,92,246,0.15);
+    --coral: #FF6B6B;
+    --gold: #FFD93D;
+    --cyan: #06D6A0;
+    --surface: #0A0A0F;
+    --card: #12121A;
+    --card-hover: #18182A;
+    --border: #1E1E2E;
+    --border-glow: #2A2A40;
+    --text: #F8F8FC;
+    --text-secondary: #9090A8;
+    --text-dim: #5A5A72;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: 'Outfit', -apple-system, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    top: -150px; right: -100px;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+    animation-delay: -10s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,107,107,0.15) 0%, transparent 70%);
+    top: 40%; left: 50%;
+    animation-delay: -5s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -20px) scale(1.05); }
+    50% { transform: translate(-20px, 30px) scale(0.95); }
+    75% { transform: translate(-30px, -15px) scale(1.02); }
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    padding: 80px 0 50px;
+  }
+
+  .badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeDown 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(0,255,148,0.2);
+  }
+
+  .badge-pulse {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .trust-badges {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .trust-badges span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    animation: fadeUp 0.7s 0.1s cubic-bezier(0.34,1.36,0.64,1) both;
+  }
+
+  h1 .highlight {
+    position: relative;
+    color: var(--accent);
+    display: inline-block;
+  }
+
+  h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 3px;
+    opacity: 0.3;
+    transform: skewX(-12deg);
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: 400;
+    animation: fadeUp 0.7s 0.2s cubic-bezier(0.34,1.36,0.64,1) both;
+  }
+
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 32px;
+    animation: fadeUp 0.7s 0.25s both;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  .platform-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 48px 0 32px;
+    animation: fadeUp 0.6s 0.3s both;
+  }
+
+  @media (max-width: 600px) {
+    .platform-selector { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .platform-card {
+    position: relative;
+    padding: 20px 16px;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .platform-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .platform-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-glow);
+    background: var(--card-hover);
+  }
+
+  .platform-card.active { transform: translateY(-4px); }
+  .platform-card.active::before { opacity: 1; }
+
+  .platform-card.yt.active { border-color: #FF0000; background: rgba(255,0,0,0.08); }
+  .platform-card.yt.active::before { background: linear-gradient(135deg, rgba(255,0,0,0.1) 0%, transparent 50%); }
+  .platform-card.tt.active { border-color: #fff; background: rgba(255,255,255,0.05); }
+  .platform-card.tt.active::before { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%); }
+  .platform-card.ig.active { border-color: #E4405F; background: rgba(228,64,95,0.08); }
+  .platform-card.ig.active::before { background: linear-gradient(135deg, rgba(228,64,95,0.1) 0%, transparent 50%); }
+  .platform-card.tw.active { border-color: #9147FF; background: rgba(145,71,255,0.08); }
+  .platform-card.tw.active::before { background: linear-gradient(135deg, rgba(145,71,255,0.1) 0%, transparent 50%); }
+
+  .platform-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .platform-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .platform-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .main-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.35s both;
+  }
+
+  .main-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+  }
+
+  @media (max-width: 600px) {
+    .main-card { padding: 28px 20px; }
+  }
+
+  .form-section { margin-bottom: 32px; }
+
+  .form-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-section-title::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 500px) {
+    .input-grid { grid-template-columns: 1fr; }
+  }
+
+  .field { position: relative; }
+
+  .field-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+
+  .field-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 400;
+    cursor: help;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+
+  .input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-dim);
+  }
+
+  .input-prefix {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    background: rgba(255,255,255,0.02);
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+    min-width: 48px;
+  }
+
+  input[type="number"],
+  input[type="text"],
+  select {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 16px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  input::placeholder { color: var(--text-dim); }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  select {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239090A8' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 16px center;
+  }
+
+  select option { background: var(--card); }
+
+  .niche-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .niche-chip {
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .niche-chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  .niche-chip.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--surface);
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+
+  .niche-multiplier {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0.8;
+  }
+
+  .niche-chip.selected .niche-multiplier {
+    background: rgba(0,0,0,0.3);
+  }
+
+  .cta-btn {
+    position: relative;
+    width: 100%;
+    margin-top: 32px;
+    padding: 20px 32px;
+    background: linear-gradient(135deg, var(--accent) 0%, #00D67F 100%);
+    color: var(--surface);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px var(--accent-glow);
+  }
+
+  .cta-btn:hover::before { opacity: 1; }
+  .cta-btn:active { transform: translateY(-1px); }
+  .cta-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .cta-btn.shake { animation: shake 0.5s ease; }
+
+  .cta-icon {
+    font-size: 22px;
+    transition: transform 0.3s;
+  }
+
+  .cta-btn:hover .cta-icon { transform: rotate(12deg) scale(1.1); }
+
+  .loading-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 0;
+  }
+
+  .loading-container.active { display: flex; }
+
+  .loading-ring {
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .loading-steps {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .loading-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    transition: color 0.3s;
+  }
+
+  .loading-step.active { color: var(--accent); }
+  .loading-step.done { color: var(--cyan); }
+
+  .loading-step-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.3s;
+  }
+
+  .loading-step.active .loading-step-icon {
+    background: var(--accent-dim);
+    box-shadow: 0 0 0 4px var(--accent-dim);
+  }
+
+  .loading-step.done .loading-step-icon { background: var(--cyan); }
+
+  #results {
+    display: none;
+    margin-top: 32px;
+    animation: slideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .results-hero {
+    background: linear-gradient(135deg, var(--accent-dim) 0%, var(--violet-dim) 100%);
+    border: 1px solid rgba(0,255,148,0.2);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .results-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--accent-dim), transparent);
+    animation: rotateBg 10s linear infinite;
+    opacity: 0.5;
+  }
+
+  @keyframes rotateBg { to { transform: rotate(360deg); } }
+
+  .results-hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .results-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+  }
+
+  .results-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    text-shadow: 0 4px 30px rgba(0,255,148,0.3);
+  }
+
+  .results-period {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .results-rank {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,217,61,0.15);
+    border: 1px solid rgba(255,217,61,0.3);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 20px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .results-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.25s;
+  }
+
+  .result-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-glow);
+  }
+
+  .result-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .result-card-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .result-card-value.accent { color: var(--accent); }
+  .result-card-value.violet { color: var(--violet); }
+  .result-card-value.coral { color: var(--coral); }
+
+  .result-card-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--cyan);
+    margin-top: 8px;
+    background: rgba(6,214,160,0.1);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .breakdown-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .breakdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .breakdown-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .revenue-bar { margin-bottom: 20px; }
+  .revenue-bar:last-child { margin-bottom: 0; }
+
+  .revenue-bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .revenue-bar-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .revenue-bar-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .revenue-bar-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .revenue-bar-track {
+    height: 10px;
+    background: var(--surface);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .revenue-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+  }
+
+  .revenue-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: rgba(255,255,255,0.4);
+    border-radius: 0 10px 10px 0;
+  }
+
+  .insights-card {
+    background: linear-gradient(135deg, var(--violet-dim) 0%, rgba(139,92,246,0.05) 100%);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .insights-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .insights-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .insights-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--violet);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .insights-title-group { flex: 1; }
+
+  .insights-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .insights-subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .insights-badge {
+    background: var(--violet);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .insights-content {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    position: relative;
+  }
+
+  .insights-content strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* SHARE SECTION */
+  .share-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-top: 20px;
+  }
+
+  .share-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .share-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .share-preview-card {
+    background: linear-gradient(135deg, var(--surface) 0%, #1a1a2e 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 32px;
+    text-align: center;
+    min-width: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .share-preview-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--violet), var(--coral));
+  }
+
+  .share-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .share-preview-badge {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .share-preview-platform {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .share-preview-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .share-preview-period {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .share-preview-niche {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 12px;
+  }
+
+  .share-preview-rank {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    background: rgba(255,217,61,0.12);
+    padding: 6px 12px;
+    border-radius: 100px;
+    margin-top: 12px;
+  }
+
+  .share-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 500px) {
+    .share-buttons { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .share-btn:hover { transform: translateY(-2px); }
+
+  .share-btn.twitter { background: #000; color: #fff; }
+  .share-btn.twitter:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  .share-btn.linkedin { background: #0A66C2; color: #fff; }
+  .share-btn.linkedin:hover { box-shadow: 0 4px 20px rgba(10,102,194,0.4); }
+  .share-btn.whatsapp { background: #25D366; color: #fff; }
+  .share-btn.whatsapp:hover { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  .share-btn.copy { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .share-btn.copy:hover { border-color: var(--accent); color: var(--accent); }
+  .share-btn.copy.copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .share-btn.download { background: var(--coral); color: #fff; }
+  .share-btn.download:hover { box-shadow: 0 4px 20px rgba(255,107,107,0.4); }
+  .share-btn.native { background: var(--violet); color: #fff; }
+  .share-btn.native:hover { box-shadow: 0 4px 20px rgba(139,92,246,0.4); }
+
+  .share-link-row {
+    display: flex;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .share-link-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-secondary);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .share-link-copy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: var(--surface);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .share-link-copy:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px var(--accent-glow);
+  }
+
+  .share-link-copy.copied { background: var(--cyan); }
+
+  .comparison-section {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .comparison-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+  }
+
+  .comparison-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.25s;
+  }
+
+  .comparison-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .comparison-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .comparison-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  .comparison-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .actions-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .action-btn:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--card-hover);
+  }
+
+  .action-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--surface);
+  }
+
+  .action-btn.primary:hover {
+    box-shadow: 0 8px 30px var(--accent-glow);
+  }
+
+  footer {
+    text-align: center;
+    padding: 60px 0 40px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes fadeDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+  }
+
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+  }
+
+  .yt-only, .tt-only, .ig-only, .tw-only { display: none; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--card);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 2000;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast-icon { font-size: 18px; }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="container">
+  <header>
+    <div class="badge-row">
+      <div class="badge">
+        <span class="badge-pulse"></span>
+        Live 2026 Rates
+      </div>
+      <div class="trust-badges">
+        <span>⚡ Instant</span>
+        <span>🔒 Private</span>
+        <span>🤖 AI-Powered</span>
+      </div>
+    </div>
+    <h1>Know Your <span class="highlight">True Worth</span></h1>
+    <p class="subtitle">AI-powered earnings calculator trusted by 50,000+ creators</p>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-value" id="calcCounter">127,843</div>
+        <div class="stat-label">Calculations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">4 Platforms</div>
+        <div class="stat-label">Supported</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">±8%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="platform-selector">
+    <div class="platform-card yt active" onclick="setPlatform('yt', this)">
+      <span class="platform-icon">▶️</span>
+      <div class="platform-name">YouTube</div>
+      <div class="platform-sub">AdSense + Sponsors</div>
+    </div>
+    <div class="platform-card tt" onclick="setPlatform('tt', this)">
+      <span class="platform-icon">🎵</span>
+      <div class="platform-name">TikTok</div>
+      <div class="platform-sub">Creator Fund</div>
+    </div>
+    <div class="platform-card ig" onclick="setPlatform('ig', this)">
+      <span class="platform-icon">📸</span>
+      <div class="platform-name">Instagram</div>
+      <div class="platform-sub">Reels + Brand</div>
+    </div>
+    <div class="platform-card tw" onclick="setPlatform('tw', this)">
+      <span class="platform-icon">🎮</span>
+      <div class="platform-name">Twitch</div>
+      <div class="platform-sub">Subs + Bits</div>
+    </div>
+  </div>
+
+  <div class="main-card">
+    <div class="form-section">
+      <div class="form-section-title">Your Audience</div>
+      <div class="input-grid">
+        <div class="field">
+          <div class="field-label">
+            <span id="followers-label">Subscribers</span>
+            <span class="field-hint">Total count</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="followers" placeholder="e.g. 50000" min="0">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">
+            <span id="views-label">Monthly Views</span>
+            <span class="field-hint">Average</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="views" placeholder="e.g. 200000" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Engagement</div>
+      <div class="input-grid">
+        <div class="field">
+          <div class="field-label">
+            <span>Engagement Rate</span>
+            <span class="field-hint" title="(Likes + Comments) / Views × 100">What's this?</span>
+          </div>
+          <div class="input-wrap">
+            <div class="input-prefix">%</div>
+            <input type="number" id="engagement" placeholder="e.g. 4.5" min="0" max="100" step="0.1" value="4">
+          </div>
+        </div>
+        <div class="field yt-only" style="display:block">
+          <div class="field-label"><span>Primary Audience</span></div>
+          <div class="input-wrap">
+            <select id="country">
+              <option value="US">🇺🇸 United States</option>
+              <option value="UK">🇬🇧 United Kingdom</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="AU">🇦🇺 Australia</option>
+              <option value="IN">🇮🇳 India</option>
+              <option value="BR">🇧🇷 Brazil</option>
+              <option value="OTHER">🌍 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field tt-only">
+          <div class="field-label"><span>Avg Views Per Video</span></div>
+          <div class="input-wrap">
+            <input type="number" id="tt-views" placeholder="e.g. 15000" min="0">
+          </div>
+        </div>
+        <div class="field ig-only">
+          <div class="field-label"><span>Content Type</span></div>
+          <div class="input-wrap">
+            <select id="ig-type">
+              <option value="reels">📱 Reels</option>
+              <option value="posts">🖼️ Static Posts</option>
+              <option value="stories">⏱️ Stories</option>
+              <option value="mixed">🔀 Mixed</option>
+            </select>
+          </div>
+        </div>
+        <div class="field tw-only">
+          <div class="field-label"><span>Concurrent Viewers</span></div>
+          <div class="input-wrap">
+            <input type="number" id="tw-viewers" placeholder="e.g. 500" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Your Niche <span style="color:var(--text-dim);font-weight:400;text-transform:none;letter-spacing:0">(affects CPM rates)</span></div>
+      <div class="niche-grid" id="nicheChips">
+        <div class="niche-chip selected" onclick="selectNiche(this,'Finance')">💰 Finance <span class="niche-multiplier">1.4x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Tech')">💻 Tech <span class="niche-multiplier">1.2x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Gaming')">🎮 Gaming <span class="niche-multiplier">0.8x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Beauty')">💄 Beauty <span class="niche-multiplier">1.1x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Fitness')">💪 Fitness <span class="niche-multiplier">1.1x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Food')">🍕 Food <span class="niche-multiplier">1.0x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Lifestyle')">✨ Lifestyle <span class="niche-multiplier">1.0x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Entertainment')">🎭 Entertainment <span class="niche-multiplier">0.7x</span></div>
+        <div class="niche-chip" onclick="selectNiche(this,'Education')">📚 Education <span class="niche-multiplier">1.3x</span></div>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="calcBtn" onclick="calculate()">
+      <span class="cta-icon">⚡</span>
+      Calculate My Earnings
+    </button>
+
+    <div class="loading-container" id="loadingContainer">
+      <div class="loading-ring"></div>
+      <div class="loading-text">Crunching the numbers...</div>
+      <div class="loading-steps">
+        <div class="loading-step active" id="step1">
+          <span class="loading-step-icon">1</span>
+          <span>Analyzing</span>
+        </div>
+        <div class="loading-step" id="step2">
+          <span class="loading-step-icon">2</span>
+          <span>Calculating</span>
+        </div>
+        <div class="loading-step" id="step3">
+          <span class="loading-step-icon">3</span>
+          <span>AI Insights</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="results-hero">
+      <div class="results-hero-content">
+        <div class="results-label">Estimated Monthly Earnings</div>
+        <div class="results-amount" id="r-monthly">$0</div>
+        <div class="results-period">per month</div>
+        <div class="results-rank" id="results-rank">🏆 Top 15% of creators in your niche</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-card-label">Annual Projection</div>
+        <div class="result-card-value accent" id="r-annual">$0</div>
+        <div class="result-card-trend">📈 +12% vs last year</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Per Content</div>
+        <div class="result-card-value violet" id="r-per-post">$0</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Hourly Rate</div>
+        <div class="result-card-value coral" id="r-hourly">$0</div>
+      </div>
+    </div>
+
+    <div class="breakdown-card">
+      <div class="breakdown-header">
+        <div class="breakdown-title">💸 Revenue Streams</div>
+      </div>
+      <div id="breakdown-list"></div>
+    </div>
+
+    <div class="insights-card">
+      <div class="insights-header">
+        <div class="insights-icon">🤖</div>
+        <div class="insights-title-group">
+          <div class="insights-title">AI Growth Advisor</div>
+          <div class="insights-subtitle">Personalized recommendations</div>
+        </div>
+        <span class="insights-badge">CLAUDE</span>
+      </div>
+      <div class="insights-content" id="ai-insight">Analyzing your profile...</div>
+    </div>
+
+    <div class="comparison-section">
+      <div class="comparison-title">What This Could Buy Monthly</div>
+      <div class="comparison-grid" id="comparison-grid"></div>
+    </div>
+
+    <div class="share-section">
+      <div class="share-section-title">📤 Share Your Results</div>
+      <div class="share-preview">
+        <div class="share-preview-card" id="shareCard">
+          <div class="share-preview-header">
+            <span class="share-preview-badge">CREATOR EARNINGS</span>
+            <span class="share-preview-platform" id="sharePreviewPlatform">YouTube</span>
+          </div>
+          <div class="share-preview-amount" id="sharePreviewAmount">$0</div>
+          <div class="share-preview-period">estimated monthly</div>
+          <div class="share-preview-niche" id="sharePreviewNiche">Finance Creator</div>
+          <div class="share-preview-rank" id="sharePreviewRank">🏆 Top 15%</div>
+        </div>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn twitter" onclick="shareToTwitter()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Twitter / X
+        </button>
+        <button class="share-btn linkedin" onclick="shareToLinkedIn()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </button>
+        <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </button>
+        <button class="share-btn copy" onclick="copyResult(this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy Text
+        </button>
+        <button class="share-btn download" onclick="downloadImage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Save Image
+        </button>
+        <button class="share-btn native" onclick="nativeShare()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          More...
+        </button>
+      </div>
+      <div class="share-link-row">
+        <input type="text" class="share-link-input" id="shareLinkInput" value="creatorearnings.ai/r/abc123" readonly>
+        <button class="share-link-copy" onclick="copyLink(this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          Copy Link
+        </button>
+      </div>
+    </div>
+
+    <div class="actions-row" style="margin-top:24px;">
+      <button class="action-btn primary" onclick="calcAgain()">🔄 Calculate Again</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Estimates based on 2026 industry data. Actual earnings may vary.<br>
+    Made with 💚 for the creator community.</p>
+  </footer>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg">Copied!</span></div>
+
+<script>
+let currentPlatform = 'yt';
+let selectedNiche = 'Finance';
+let lastResults = null;
+let calcCount = 127843;
+
+// Toast notification
+function showToast(message, icon = '✓') {
+  const toast = document.getElementById('toast');
+  const msg = document.getElementById('toastMsg');
+  const toastIcon = toast.querySelector('.toast-icon');
+  msg.textContent = message;
+  toastIcon.textContent = icon;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Counter animation
+function animateCounter() {
+  setInterval(() => {
+    calcCount += Math.floor(Math.random() * 3);
+    document.getElementById('calcCounter').textContent = calcCount.toLocaleString();
+  }, 5000);
+}
+animateCounter();
+
+function setPlatform(p, el) {
+  currentPlatform = p;
+  document.querySelectorAll('.platform-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  
+  document.querySelectorAll('.yt-only,.tt-only,.ig-only,.tw-only').forEach(e => e.style.display='none');
+  document.querySelectorAll('.'+p+'-only').forEach(e => e.style.display='block');
+  
+  const labels = {
+    yt: ['Subscribers','Monthly Views'],
+    tt: ['Followers','Monthly Video Views'],
+    ig: ['Followers','Monthly Reach'],
+    tw: ['Followers','Monthly Stream Hours']
+  };
+  document.getElementById('followers-label').textContent = labels[p][0];
+  document.getElementById('views-label').textContent = labels[p][1];
+  document.getElementById('results').style.display = 'none';
+}
+
+function selectNiche(el, niche) {
+  document.querySelectorAll('.niche-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedNiche = niche;
+}
+
+function fmt(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000).toLocaleString() + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function fmtShort(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return Math.round(n/1000) + 'K';
+  return Math.round(n).toLocaleString();
+}
+
+function calcEstimates() {
+  const followers = parseFloat(document.getElementById('followers').value) || 0;
+  const views = parseFloat(document.getElementById('views').value) || 0;
+  const engagement = parseFloat(document.getElementById('engagement').value) || 4;
+  const p = currentPlatform;
+  const n = selectedNiche;
+
+  const cpms = {
+    Finance: {yt:16,tt:0.05,ig:0,tw:0},
+    Tech: {yt:11,tt:0.04,ig:0,tw:0},
+    Gaming: {yt:5,tt:0.03,ig:0,tw:0},
+    Beauty: {yt:7,tt:0.035,ig:0,tw:0},
+    Fitness: {yt:8,tt:0.035,ig:0,tw:0},
+    Food: {yt:6,tt:0.03,ig:0,tw:0},
+    Lifestyle: {yt:6,tt:0.03,ig:0,tw:0},
+    Entertainment: {yt:4,tt:0.025,ig:0,tw:0},
+    Education: {yt:10,tt:0.04,ig:0,tw:0},
+  };
+  
+  const country = document.getElementById('country')?.value || 'US';
+  const countryMult = {US:1,UK:0.92,CA:0.88,AU:0.92,IN:0.14,BR:0.22,OTHER:0.42};
+  const cm = countryMult[country] || 1;
+  const cpm = (cpms[n]?.[p] || 6) * cm;
+
+  let ads = 0, sponsors = 0, other = 0, breakdown = [];
+
+  if (p === 'yt') {
+    ads = (views / 1000) * cpm * 0.55;
+    const engagedFollowers = followers * (engagement/100);
+    sponsors = (engagedFollowers / 1000) * (n==='Finance'?50:n==='Tech'?35:n==='Gaming'?20:25);
+    other = (followers / 1000) * 2.5;
+    breakdown = [
+      {label:'AdSense Revenue', amount:ads, color:'#FF6B6B', icon:'📺', pct:0},
+      {label:'Sponsorships', amount:sponsors, color:'#00FF94', icon:'🤝', pct:0},
+      {label:'Memberships & Merch', amount:other, color:'#8B5CF6', icon:'⭐', pct:0},
+    ];
+  } else if (p === 'tt') {
+    const vidViews = parseFloat(document.getElementById('tt-views').value) || (views/15);
+    ads = vidViews * 20 * 0.04 / 1000 * 1000;
+    sponsors = (followers / 1000) * (engagement/100) * (n==='Finance'?40:n==='Beauty'?35:22);
+    other = followers * 0.0012;
+    breakdown = [
+      {label:'Creator Fund', amount:ads, color:'#FF6B6B', icon:'🎵', pct:0},
+      {label:'Brand Deals', amount:sponsors, color:'#00FF94', icon:'🤝', pct:0},
+      {label:'Live Gifts', amount:other, color:'#8B5CF6', icon:'🎁', pct:0},
+    ];
+  } else if (p === 'ig') {
+    const igType = document.getElementById('ig-type').value;
+    const reelMult = igType==='reels'?1.3:igType==='posts'?0.75:0.55;
+    ads = (views / 1000) * 1.8 * reelMult;
+    sponsors = (followers / 1000) * (engagement/100) * (n==='Beauty'?45:n==='Fitness'?38:28);
+    other = followers * 0.0006;
+    breakdown = [
+      {label:'Reels Bonus', amount:ads, color:'#FF6B6B', icon:'🎬', pct:0},
+      {label:'Sponsored Posts', amount:sponsors, color:'#00FF94', icon:'📸', pct:0},
+      {label:'Affiliate & Links', amount:other, color:'#8B5CF6', icon:'🔗', pct:0},
+    ];
+  } else if (p === 'tw') {
+    const ccv = parseFloat(document.getElementById('tw-viewers').value) || (followers*0.025);
+    const hours = views || 80;
+    ads = ccv * hours * 0.003;
+    const subs = followers * 0.006;
+    sponsors = subs * 3.5 * 0.7;
+    other = ccv * hours * 0.0025;
+    breakdown = [
+      {label:'Ad Revenue', amount:ads, color:'#FF6B6B', icon:'📺', pct:0},
+      {label:'Subscriptions', amount:sponsors, color:'#00FF94', icon:'💜', pct:0},
+      {label:'Bits & Donations', amount:other, color:'#8B5CF6', icon:'💎', pct:0},
+    ];
+  }
+
+  const monthly = ads + sponsors + other;
+  breakdown.forEach(b => b.pct = (b.amount / monthly) * 100);
+  
+  const annual = monthly * 12;
+  const postsPerMonth = p==='yt'?8:p==='tt'?22:p==='ig'?15:p==='tw'?1:8;
+  const perPost = monthly / postsPerMonth;
+  const hoursPerMonth = p==='yt'?40:p==='tt'?30:p==='ig'?25:p==='tw'?views||80:35;
+  const hourly = monthly / hoursPerMonth;
+
+  const avgCreatorEarnings = {
+    Finance: 2500, Tech: 2000, Gaming: 1200, Beauty: 1800,
+    Fitness: 1500, Food: 1300, Lifestyle: 1400, Entertainment: 1000, Education: 1800
+  };
+  const avgEarning = avgCreatorEarnings[n] || 1500;
+  let percentile = Math.min(99, Math.round((monthly / (avgEarning * 3)) * 50 + 50));
+  if (percentile > 95) percentile = 95 + Math.floor(Math.random() * 4);
+  if (percentile < 20) percentile = 20 + Math.floor(Math.random() * 10);
+
+  return { monthly, annual, perPost, hourly, ads, sponsors, other, breakdown, percentile };
+}
+
+function createConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#00FF94', '#8B5CF6', '#FF6B6B', '#FFD93D', '#06D6A0'];
+  
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    confetti.style.width = (Math.random() * 8 + 6) + 'px';
+    confetti.style.height = (Math.random() * 8 + 6) + 'px';
+    
+    const animation = confetti.animate([
+      { top: '-10%', opacity: 1, transform: `rotate(0deg) translateX(0)` },
+      { top: '100%', opacity: 0, transform: `rotate(${Math.random() * 720}deg) translateX(${(Math.random() - 0.5) * 200}px)` }
+    ], {
+      duration: Math.random() * 2000 + 2000,
+      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      delay: Math.random() * 500
+    });
+    
+    container.appendChild(confetti);
+    animation.onfinish = () => confetti.remove();
+  }
+}
+
+function animateValue(el, end, prefix = '$', duration = 1500) {
+  const start = 0;
+  const startTime = performance.now();
+  
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 4);
+    const current = start + (end - start) * eased;
+    
+    if (end >= 1000000) {
+      el.textContent = prefix + (current/1000000).toFixed(1) + 'M';
+    } else if (end >= 1000) {
+      el.textContent = prefix + Math.round(current/1000).toLocaleString() + 'K';
+    } else {
+      el.textContent = prefix + Math.round(current).toLocaleString();
+    }
+    
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  
+  requestAnimationFrame(update);
+}
+
+function updateComparisonGrid(monthly) {
+  const items = [
+    { icon: '☕', label: 'Fancy Coffees', value: Math.round(monthly / 6) },
+    { icon: '🍕', label: 'Pizza Nights', value: Math.round(monthly / 25) },
+    { icon: '🎮', label: 'Video Games', value: Math.round(monthly / 60) },
+    { icon: '✈️', label: 'Weekend Trips', value: (monthly / 400).toFixed(1) },
+    { icon: '🏋️', label: 'Gym Memberships', value: Math.round(monthly / 50) },
+    { icon: '📱', label: 'iPhone 16s', value: (monthly / 999).toFixed(1) },
+  ];
+  
+  let selected;
+  if (monthly < 500) selected = items.slice(0, 3);
+  else if (monthly < 2000) selected = [items[0], items[2], items[4]];
+  else selected = [items[2], items[3], items[5]];
+  
+  document.getElementById('comparison-grid').innerHTML = selected.map(item => `
+    <div class="comparison-item">
+      <span class="comparison-icon">${item.icon}</span>
+      <div class="comparison-label">${item.label}</div>
+      <div class="comparison-value">${item.value}</div>
+    </div>
+  `).join('');
+}
+
+function updateSharePreview() {
+  if (!lastResults) return;
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  document.getElementById('sharePreviewPlatform').textContent = platform;
+  document.getElementById('sharePreviewAmount').textContent = fmt(lastResults.monthly);
+  document.getElementById('sharePreviewNiche').textContent = `${selectedNiche} Creator`;
+  document.getElementById('sharePreviewRank').textContent = `🏆 Top ${100 - lastResults.percentile}%`;
+  
+  const shareId = Math.random().toString(36).substring(2, 8);
+  document.getElementById('shareLinkInput').value = `creatorearnings.ai/r/${shareId}`;
+}
+
+async function calculate() {
+  const followers = document.getElementById('followers').value;
+  const views = document.getElementById('views').value;
+  
+  if (!followers || !views) {
+    const btn = document.getElementById('calcBtn');
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 500);
+    showToast('Please enter your followers and views!', '⚠️');
+    return;
+  }
+
+  const btn = document.getElementById('calcBtn');
+  const loader = document.getElementById('loadingContainer');
+  
+  btn.style.display = 'none';
+  loader.classList.add('active');
+  
+  await new Promise(r => setTimeout(r, 600));
+  document.getElementById('step1').classList.add('done');
+  document.getElementById('step2').classList.add('active');
+  
+  await new Promise(r => setTimeout(r, 600));
+  document.getElementById('step2').classList.add('done');
+  document.getElementById('step3').classList.add('active');
+  
+  const est = calcEstimates();
+  lastResults = est;
+  
+  await new Promise(r => setTimeout(r, 500));
+  document.getElementById('step3').classList.add('done');
+  
+  loader.classList.remove('active');
+  btn.style.display = 'flex';
+  
+  document.querySelectorAll('.loading-step').forEach(s => s.classList.remove('active', 'done'));
+  document.getElementById('step1').classList.add('active');
+  
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+  
+  if (est.monthly > 500) createConfetti();
+  
+  animateValue(document.getElementById('r-monthly'), est.monthly);
+  animateValue(document.getElementById('r-annual'), est.annual);
+  animateValue(document.getElementById('r-per-post'), est.perPost);
+  animateValue(document.getElementById('r-hourly'), est.hourly);
+  
+  document.getElementById('results-rank').innerHTML = `🏆 Top ${100 - est.percentile}% of ${selectedNiche} creators`;
+  
+  const maxAmount = Math.max(...est.breakdown.map(b => b.amount));
+  document.getElementById('breakdown-list').innerHTML = est.breakdown.map(b => `
+    <div class="revenue-bar">
+      <div class="revenue-bar-header">
+        <div class="revenue-bar-label">
+          <span class="revenue-bar-icon" style="background:${b.color}22">${b.icon}</span>
+          <span>${b.label}</span>
+        </div>
+        <span class="revenue-bar-amount" style="color:${b.color}">${fmt(b.amount)}</span>
+      </div>
+      <div class="revenue-bar-track">
+        <div class="revenue-bar-fill" style="background:${b.color};width:0%"></div>
+      </div>
+    </div>
+  `).join('');
+  
+  setTimeout(() => {
+    document.querySelectorAll('.revenue-bar-fill').forEach((bar, i) => {
+      const pct = (est.breakdown[i].amount / maxAmount) * 100;
+      bar.style.width = pct + '%';
+    });
+  }, 100);
+  
+  updateComparisonGrid(est.monthly);
+  updateSharePreview();
+  
+  document.getElementById('ai-insight').innerHTML = '✨ Generating personalized growth strategy...';
+  
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  const prompt = `You are an expert creator economy analyst. A ${platform} creator in the ${selectedNiche} niche:
+- ${fmtShort(parseFloat(followers))} followers
+- ${fmtShort(parseFloat(views))} monthly views
+- ${document.getElementById('engagement').value || 4}% engagement
+- Est. monthly: ${fmt(est.monthly)}
+- Top revenue: ${est.breakdown.sort((a,b) => b.amount - a.amount)[0].label}
+
+Give 3-4 punchy, actionable insights. Be specific to their platform/niche. Reference their numbers. Confident, encouraging tone. Max 160 words. Short paragraphs, no bullets.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    if (text) {
+      document.getElementById('ai-insight').innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    } else {
+      throw new Error('No content');
+    }
+  } catch(e) {
+    document.getElementById('ai-insight').innerHTML = `With <strong>${fmtShort(parseFloat(followers))} followers</strong> in ${selectedNiche}, you're earning an estimated <strong>${fmt(est.monthly)}/month</strong>. Your ${est.breakdown.sort((a,b) => b.amount - a.amount)[0].label.toLowerCase()} is your strongest revenue stream. Consider pitching 2-3 brands per week to grow sponsorship income — your engagement rate makes you attractive to brands. Focus on long-form content for better returns.`;
+  }
+  
+  btn.innerHTML = '<span class="cta-icon">🔄</span> Recalculate';
+  calcCount++;
+  document.getElementById('calcCounter').textContent = calcCount.toLocaleString();
+}
+
+function getShareText() {
+  if (!lastResults) return '';
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  return `My ${platform} earnings estimate (${selectedNiche} niche):
+
+💰 Monthly: ${fmt(lastResults.monthly)}
+📅 Annual: ${fmt(lastResults.annual)}
+🎯 Per post: ${fmt(lastResults.perPost)}
+
+Top ${100 - lastResults.percentile}% of creators! 🚀
+
+Calculate yours → creatorearnings.ai`;
+}
+
+function copyResult(btn) {
+  const text = getShareText();
+  navigator.clipboard.writeText(text).then(() => {
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+    btn.classList.add('copied');
+    showToast('Results copied to clipboard!');
+    setTimeout(() => { 
+      btn.innerHTML = originalHTML;
+      btn.classList.remove('copied'); 
+    }, 2000);
+  });
+}
+
+function copyLink(btn) {
+  const link = document.getElementById('shareLinkInput').value;
+  navigator.clipboard.writeText(`https://${link}`).then(() => {
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+    btn.classList.add('copied');
+    showToast('Link copied!');
+    setTimeout(() => { 
+      btn.innerHTML = originalHTML;
+      btn.classList.remove('copied'); 
+    }, 2000);
+  });
+}
+
+function shareToTwitter() {
+  if (!lastResults) return;
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  const text = encodeURIComponent(`Just calculated my ${platform} earnings potential: ${fmt(lastResults.monthly)}/month in ${selectedNiche}! 💰
+
+Top ${100 - lastResults.percentile}% of creators 🚀
+
+Calculate yours →`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=https://creatorearnings.ai`, '_blank');
+}
+
+function shareToLinkedIn() {
+  if (!lastResults) return;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://creatorearnings.ai`, '_blank');
+}
+
+function shareToWhatsApp() {
+  if (!lastResults) return;
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  const text = encodeURIComponent(`🔥 Just calculated my ${platform} earnings!
+
+💰 Monthly: ${fmt(lastResults.monthly)}
+📅 Annual: ${fmt(lastResults.annual)}
+🏆 Top ${100 - lastResults.percentile}% of ${selectedNiche} creators!
+
+Try it yourself: https://creatorearnings.ai`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function nativeShare() {
+  if (!lastResults) return;
+  const platform = {yt:'YouTube',tt:'TikTok',ig:'Instagram',tw:'Twitch'}[currentPlatform];
+  
+  if (navigator.share) {
+    navigator.share({
+      title: `My ${platform} Earnings: ${fmt(lastResults.monthly)}/month`,
+      text: `I'm in the top ${100 - lastResults.percentile}% of ${selectedNiche} creators! 🚀`,
+      url: 'https://creatorearnings.ai'
+    }).catch(() => {});
+  } else {
+    copyResult(document.querySelector('.share-btn.copy'));
+  }
+}
+
+async function downloadImage() {
+  if (!lastResults) return;
+  
+  showToast('Generating image...', '📷');
+  
+  const shareCard = document.getElementById('shareCard');
+  
+  try {
+    const canvas = await html2canvas(shareCard, {
+      backgroundColor: '#0A0A0F',
+      scale: 2,
+      logging: false,
+      useCORS: true
+    });
+    
+    const link = document.createElement('a');
+    link.download = `creator-earnings-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    showToast('Image downloaded!', '✅');
+  } catch(e) {
+    console.error(e);
+    showToast('Right-click the card to save as image', '💡');
+  }
+}
+
+function calcAgain() {
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('calcBtn').innerHTML = '<span class="cta-icon">⚡</span> Calculate My Earnings';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Input formatting
+document.querySelectorAll('input[type="number"]').forEach(input => {
+  input.addEventListener('input', function() {
+    this.value = this.value.replace(/[^\d.]/g, '');
+  });
+});
+</script>
+</body>
+</html>
